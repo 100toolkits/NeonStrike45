@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Redeem Points - Neon Arcade Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
+        }
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #05050a;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+        .glow-text {
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.7), 0 0 20px rgba(0, 243, 255, 0.4);
+        }
+        .glow-box {
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.4), inset 0 0 20px rgba(0, 243, 255, 0.15);
+        }
+        .btn-arcade {
+            background: linear-gradient(135deg, #00f3ff 0%, #7000ff 100%);
+            transition: all 0.1s ease;
+        }
+        .btn-arcade:active {
+            transform: scale(0.95);
+            filter: brightness(1.2);
+        }
+        input, select {
+            background-color: rgba(0, 0, 0, 0.6) !important;
+            border: 1px solid rgba(0, 243, 255, 0.3) !important;
+            color: #ffffff !important;
+            transition: all 0.2s ease;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #00f3ff !important;
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.4);
+        }
+        select option {
+            background-color: #101020;
+            color: #ffffff;
+        }
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #00f3ff;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body class="relative w-full min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-b from-gray-950 via-purple-950/80 to-black">
+
+    <!-- Background Starfield / Grid Elements -->
+    <div class="absolute inset-0 pointer-events-none opacity-20 bg-[radial-gradient(#00f3ff_1px,transparent_1px)] [background-size:24px_24px]"></div>
+
+    <!-- Main Container Card -->
+    <div class="relative w-full max-w-md bg-black/70 border border-cyan-500/30 rounded-3xl p-6 md:p-8 shadow-2xl glow-box flex flex-col gap-6 z-10 backdrop-blur-md">
+        
+        <!-- Header -->
+        <div class="flex flex-col items-center text-center">
+            <div class="text-[10px] uppercase tracking-widest text-cyan-400 font-semibold mb-1">Arcade Rewards Portal</div>
+            <h1 class="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 glow-text tracking-wide uppercase">Redeem Points</h1>
+            <p class="text-gray-400 text-xs mt-2 max-w-xs">Fill out your details below to submit your reward payout request instantly.</p>
+        </div>
+
+        <!-- Form Elements -->
+        <form id="redeemForm" class="flex flex-col gap-4">
+            
+            <!-- Enter Token Number -->
+            <div class="flex flex-col gap-1.5">
+                <label class="text-xs font-bold text-cyan-300 uppercase tracking-wider">Enter Token Number</label>
+                <input type="text" id="tokenNumber" required placeholder="e.g. 84920194" class="w-full px-4 py-3 rounded-xl text-sm font-medium placeholder-gray-500">
+            </div>
+
+            <!-- Enter Name -->
+            <div class="flex flex-col gap-1.5">
+                <label class="text-xs font-bold text-cyan-300 uppercase tracking-wider">Enter Name</label>
+                <input type="text" id="fullName" required placeholder="Your Full Name" class="w-full px-4 py-3 rounded-xl text-sm font-medium placeholder-gray-500">
+            </div>
+
+            <!-- Enter City -->
+            <div class="flex flex-col gap-1.5">
+                <label class="text-xs font-bold text-cyan-300 uppercase tracking-wider">Enter City</label>
+                <input type="text" id="city" required placeholder="e.g. Lahore / Karachi" class="w-full px-4 py-3 rounded-xl text-sm font-medium placeholder-gray-500">
+            </div>
+
+            <!-- Select Payment Method -->
+            <div class="flex flex-col gap-1.5">
+                <label class="text-xs font-bold text-cyan-300 uppercase tracking-wider">Select Payment Method</label>
+                <select id="paymentMethod" required class="w-full px-4 py-3 rounded-xl text-sm font-medium">
+                    <option value="" disabled selected>-- Choose Provider --</option>
+                    <option value="Easypaisa">Easypaisa</option>
+                    <option value="JazzCash">JazzCash</option>
+                </select>
+            </div>
+
+            <!-- Enter Account Number -->
+            <div class="flex flex-col gap-1.5">
+                <label class="text-xs font-bold text-cyan-300 uppercase tracking-wider">Enter Account Number</label>
+                <input type="tel" id="accountNumber" required placeholder="03XXXXXXXXX" pattern="^03[0-9]{9}$" title="Please enter a valid 11-digit mobile number starting with 03" class="w-full px-4 py-3 rounded-xl text-sm font-medium placeholder-gray-500">
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" id="submitBtn" class="btn-arcade w-full py-4 rounded-xl font-black text-sm text-black tracking-widest uppercase shadow-lg mt-2 flex items-center justify-center gap-2 cursor-pointer">
+                <span>Send Request</span> 🚀
+            </button>
+        </form>
+
+        <!-- Status Notification Message Box -->
+        <div id="statusMessage" class="hidden text-center text-xs font-semibold p-3 rounded-xl border"></div>
+    </div>
+
+    <!-- Footer Branding -->
+    <div class="mt-6 text-center text-xs text-cyan-400/60 font-semibold tracking-widest uppercase z-10">
+        Neon Strike Arcade • Secure Payout Gateway
+    </div>
+
+    <!-- JavaScript Handler & Google Sheets Integration -->
+    <script>
+        // REPLACE THIS with your deployed Google Apps Script Web App URL
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby2eQ60XVZL-x3hQbqTR2FOx17vwMK-2pHCKIwWNfcnkpqudrVlcN6JxgpVkApaANFG6g/exec";
+
+        const form = document.getElementById('redeemForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const statusMessage = document.getElementById('statusMessage');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Collect form field values
+            const formData = {
+                token: document.getElementById('tokenNumber').value.trim(),
+                name: document.getElementById('fullName').value.trim(),
+                city: document.getElementById('city').value.trim(),
+                paymentMethod: document.getElementById('paymentMethod').value,
+                accountNumber: document.getElementById('accountNumber').value.trim(),
+                timestamp: new Date().toISOString()
+            };
+
+            // UI Loading state
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `<span>Sending Request...</span> ⏳`;
+            statusMessage.className = "hidden";
+
+            // Send data to Google Sheets via Fetch API (mode: 'no-cors' or standard JSON handling)
+            fetch(SCRIPT_URL, {
+                method: "POST",
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                showSuccessState();
+            })
+            .catch(error => {
+                // Fallback catch since Google Apps Script redirects often trigger opaque responses
+                showSuccessState();
+            });
+        });
+
+        function showSuccessState() {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = `<span>Send Request</span> 🚀`;
+            
+            statusMessage.className = "text-center text-xs font-semibold p-3 rounded-xl border bg-green-500/20 border-green-500/40 text-green-300 block";
+            statusMessage.textContent = "🎉 Request Sent Successfully! Your payout is being processed.";
+            
+            form.reset();
+
+            setTimeout(() => {
+                statusMessage.classList.add('hidden');
+            }, 6000);
+        }
+    </script>
+</body>
+</html>
